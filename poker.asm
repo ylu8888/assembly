@@ -192,6 +192,7 @@ addi $t3, $t3, -48  #convert second dec char to int w/ ascii
 addi $t4, $t4, -48  #convert third dec char to int w/ ascii
 addi $t5, $t5, -48  #convert fourth dec char to int w/ ascii
 addi $t6, $t6, -48  #convert fifth dec char to int w/ ascii
+
 li $s6, 10000  #times 10000 to shift left by four
 mul $t2, $t2, $s6  #store 5 digit num in $t2
 li $s6, 1000  #times 1000 to shift left by three
@@ -199,11 +200,13 @@ mul $t3, $t3, $s6  #store 4 digit num in $t3
 li $s6, 100  #times 100 to shift left by two
 mul $t4, $t4, $s6  #store 3 digit num in $t4
 li $s6, 10  #times 10 to shift left by one
+
 mul $t5, $t5, $s6  #store 2 digit num in $t5
 add $s7, $t2, $t3  # sum of 5 digit num and 4 digit num
 add $s7, $s7, $t4  #add sum with 3 digit num
 add $s7, $s7, $t5  #add sum with 2 digit num
 add $s7, $s7, $t6  #add sum with last digit
+
 li $t7, 65536 #checking bounds if less than 65536
 slt $t8, $s7, $t7 #if $s7 is less than 65536 then store 1 in $t8, otherwise store 0
 beq $t8, $t9, print_invalid # $if $t8 equal to 0, print invalid args
@@ -248,6 +251,7 @@ bne $t1, $s1, print_inv #print error if not a null term
 
 #check if 8 chars are valid hex values
 #FIRST CHAR
+
 lb $t1, 2($t0)  #get second char
 li $s0, 48 #ascii for '0'   
 blt $t1, $s0, print_inv  #if second char is less than '0' print invalid
@@ -259,6 +263,7 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, second_char #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
+
 second_char:
 lb $t1, 3($t0)  #get third char
 li $s0, 48 #ascii for '0'   
@@ -271,6 +276,7 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, third_char #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
+
 third_char:
 lb $t1, 4($t0)  #get fourth char
 li $s0, 48 #ascii for '0'   
@@ -283,6 +289,7 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, fourth_char #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
+
 fourth_char: #FOURTH CHAR
 lb $t1, 5($t0)  #get fifth char
 li $s0, 48 #ascii for '0'   
@@ -295,6 +302,7 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, fifth_char #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
+
 fifth_char: #FIFTH CHAR
 lb $t1, 6($t0)  #get sixth char
 li $s0, 48 #ascii for '0'   
@@ -307,6 +315,7 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, sixth_char #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
+
 sixth_char: #SIXTH CHAR
 lb $t1, 7($t0)  #get seventh char
 li $s0, 48 #ascii for '0'   
@@ -319,6 +328,7 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, seventh_char #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
+
 seventh_char:#SEVENTH CHAR
 lb $t1, 8($t0)  #get eigth char
 li $s0, 48 #ascii for '0'   
@@ -331,6 +341,7 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, eighth_char #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
+
 eighth_char: #EIGTH CHAR
 lb $t1, 9($t0)  #get ninth char
 li $s0, 48 #ascii for '0'   
@@ -343,7 +354,6 @@ li $s0, 103 #ascii for 'f'
 blt $t1, $s0, valid_hex #if second char is between a-f is valid hex value
 li $s0, 128 #the last ascii 'DEL'
 blt $t1, $s0, print_inv  #if second char is less than 'DEL' print invalid
-
 
 #the 8 char hex num is valid, begin next part
 valid_hex:
@@ -554,8 +564,6 @@ la $a0, invalid_args_error #else, send an error msg
 li $v0, 4
 syscall
 j exit
-
-
 
 valid_poperation:
 lw $t0, addr_arg1 #store the hand into $t0
